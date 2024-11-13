@@ -4,6 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>CosmosDB:ConnectionString</UserSecretsId>
+    <UserSecretsId>CosmosDB:DatabaseName</UserSecretsId>
+    <UserSecretsId>CosmosDB:MaintenanceRequestsContainerName</UserSecretsId>
+    <UserSecretsId>AzureOpenAI:EmbeddingDeploymentName</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
