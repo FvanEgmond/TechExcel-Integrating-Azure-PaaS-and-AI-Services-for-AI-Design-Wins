@@ -11,7 +11,7 @@ namespace ContosoSuitesWebAPI.Services;
 /// </summary>
 public class DatabaseService : IDatabaseService
 {
-    [KernelFunction]
+    [KernelFunction("get_hotels")]
     [Description("Get all hotels.")]
     /// <summary>
     /// Get all hotels from the database.
