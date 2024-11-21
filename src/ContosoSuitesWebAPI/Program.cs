@@ -14,6 +14,11 @@ using Microsoft.SemanticKernel.ChatCompletion;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var config = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables()
+    .Build();
+  
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,19 +46,19 @@ builder.Services.AddSingleton<Kernel>((_) =>
         endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
         apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
     );
-    kernelBuilder.Plugins.AddFromType<DatabaseService>();
-
-#pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    //kernelBuilder.Plugins.AddFromType<DatabaseService>();
+    #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(
        deploymentName: builder.Configuration["AzureOpenAI:EmbeddingDeploymentName"]!,
        endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
        apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
-    );
-#pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
+
+
+    );
+    #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     kernelBuilder.Plugins.AddFromType<DatabaseService>();
-    kernelBuilder.Plugins.AddFromType<MaintenanceRequestPlugin>("MaintenanceCopilot");
-    
+    kernelBuilder.Plugins.AddFromType<MaintenanceRequestPlugin>("MaintenanceCopilot"); 
     kernelBuilder.Services.AddSingleton<CosmosClient>((_) =>
     {
         CosmosClient client = new(
@@ -64,21 +69,6 @@ builder.Services.AddSingleton<Kernel>((_) =>
 
     return kernelBuilder.Build();
 });
-
-// Create a single instance of the AzureOpenAIClient to be shared across the application.
-// builder.Services.AddSingleton<AzureOpenAIClient>((_) =>
-// {
-//     var endpoint = new Uri(builder.Configuration["AzureOpenAI:Endpoint"]!);
-//     var credentials = new AzureKeyCredential(builder.Configuration["AzureOpenAI:ApiKey"]!);
-
-//     var client = new AzureOpenAIClient(endpoint, credentials);
-//     return client;
-// });
-
-var config = new ConfigurationBuilder()
-    .AddUserSecrets<Program>()
-    .AddEnvironmentVariables()
-    .Build();
 
 var app = builder.Build();
 
